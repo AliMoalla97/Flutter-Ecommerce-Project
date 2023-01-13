@@ -1,0 +1,45 @@
+buildscript {
+    ext.kotlin_version = '1.3.50'
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:4.1.0'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+		 configurations.all {
+        resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+            def requested = details.requested
+            if (requested.group == 'com.google.firebase' && requested.name == 'firebase-messaging') {
+                details.useVersion '17.1.0'  //use a common firebase version here
+            }
+
+            if (requested.group == 'com.google.android.gms' && (requested.name == 'play-services-maps' || requested.name == 'play-services-location')) {
+                details.useVersion '15.0.1'  //use a common gms version here
+            }
+
+            if (requested.group == 'com.android.support' && requested.name != 'multidex') {
+                details.useVersion '27.1.1'  //use a common support libraries version here
+            }
+        }
+    }
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+rootProject.buildDir = '../build'
+subprojects {
+    project.buildDir = "${rootProject.buildDir}/${project.name}"
+    project.evaluationDependsOn(':app')
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

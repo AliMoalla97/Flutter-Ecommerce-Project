@@ -1,0 +1,18 @@
+{
+  "kind": "collectionType",
+  "collectionName": "carts",
+  "info": {
+    "name": "cart"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true
+  },
+  "attributes": {
+    "products": {
+      "via": "carts",
+      "collection": "product",
+      "dominant": true
+    }
+  }
+}
